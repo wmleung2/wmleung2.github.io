@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <script src='https://d3js.org/d3.v5.min.js'></script>
-<style> circle {fill: light blue; stroke: black;} </style>
+<style> circle {fill: lightblue; stroke: black;} </style>
 
 <body onload='init()'>
 <svg width=300 height=300>
@@ -30,6 +30,7 @@ async function init(){
     .attr('r', function(d,i){return rscale(d.EngineCylinders);});
 
   d3.select("svg").append("g")
+   .attr("transform", "translate(50,50)")
    .call(d3.axisLeft(yscale)
      .tickValues([10,20,50,100])
      .tickFormat(d3.format("~s")))
