@@ -1,10 +1,24 @@
 <!DOCTYPE html>
 <html>
 <script src='https://d3js.org/d3.v5.min.js'></script>
-<style> circle {fill: lightblue; stroke: black;} </style>
+<style> circle { stroke: black;} </style>
 
 <body onload='init()'>
-<svg width=300 height=300>
+<svg id="scene" width=600 height=600>
+
+div.tooltip {	
+    position: absolute;			
+    text-align: center;			
+    width: 60px;					
+    height: 28px;					
+    padding: 2px;				
+    font: 12px sans-serif;		
+    background: lightsteelblue;	
+    border: 0px;		
+    border-radius: 8px;			
+    pointer-events: none;			
+}
+
 </svg>
 
 <script>
@@ -12,34 +26,100 @@ async function init(){
   const data = await d3.csv(
     'https://flunky.github.io/cars2017.csv');
 
+ var div = d3.select("svg").append("div")	
+    .attr("class", "tooltip")				
+    .style("opacity", 0);
+
   var xscale = d3.scaleLog().base(10)
-    .domain([10,150]).range([0,200]);
+    .domain([10,150]).range([0,500]);
 
   var yscale = d3.scaleLog().base(10)
-    .domain([10,150]).range([200,0]);
+    .domain([10,150]).range([500,0]);
 
   var rscale = d3.scaleLinear()
     .domain([0,12]).range([2,14]);
+
+  var fuelColor = {
+      'Diesel': 'red',
+      'Gasoline': 'blue',
+      'Electricity': 'green'
+    };
+
+  var fuelOpacity = {
+      'Diesel': 1,
+      'Gasoline': 0,
+      'Electricity': 0
+    };
+
+  var blueOpacity = {
+      'red': 0,
+      'blue': 1,
+      'green': 0
+    };
+
+  var greenOpacity = {
+      'red': 0,
+      'blue': 0,
+      'green': 1
+    };
+ 
+
 
   d3.select("svg").append("g")
    .attr("transform", "translate(50,50)")
    .selectAll("circle").data(data).enter()
     .append("circle")
     .attr('cx', function(d,i){return xscale(d.AverageCityMPG);})
+    .attr('cy', 500)
+    .attr('r', 4)
+    .style('fill', function(d,i){return fuelColor[d.Fuel];})
+    .style('opacity', function(d,i){return fuelOpacity[d.Fuel];})
+    .transition().duration(3000).delay(1000)
     .attr('cy', function(d,i){return yscale(d.AverageHighwayMPG);})
-    .attr('r', function(d,i){return rscale(d.EngineCylinders);});
+    .transition().duration(3000).delay(1000)
+    .style('opacity', function(d,i){return blueOpacity[d.fill];})
+    .transition().duration(3000).delay(1000)
+    .style('opacity', function(d,i){return greenOpacity[d.fill];})
+    .call(d3.legend);
+ 
 
+  d3.select("svg").selectAll("circle").data(data)
+   .on("mouseover", function(d) {		
+            div.transition()		
+                .duration(200)		
+                .style("opacity", .9);		
+            div .html(d.Make + "<br/>"  + d.Fuel + "<br/>" + d.EngineCylinders)	
+                .style("left", (d3.event.pageX) + "px")		
+                .style("top", (d3.event.pageY - 28) + "px");	
+            })					
+    .on("mouseout", function(d) {		
+            div.transition()		
+                .duration(500)		
+                .style("opacity", 0);	
+        });
+ 
   d3.select("svg").append("g")
+   .append("line")
+    .attr('x1', 0)
+    .attr('y1', 600)
+    .attr('x2', 600)
+    .attr('y2', 0)
+    .attr('stroke', 'red')
+    .attr('stroke-dash-array', '1, 5');
+
+ 
+ d3.select("svg").append("g")
    .attr("transform", "translate(50,50)")
    .call(d3.axisLeft(yscale)
      .tickValues([10,20,50,100])
-     .tickFormat(d3.format("~s")))
+     .tickFormat(d3.format("~s")));
 
   d3.select("svg").append("g")
-   .attr("transform", "translate(50,250)")
+   .attr("transform", "translate(50,550)")
    .call(d3.axisBottom(xscale)
      .tickValues([10,20,50,100])
-     .tickFormat(d3.format("~s")))
+     .tickFormat(d3.format("~s")));
+
 }
 </script>
 
