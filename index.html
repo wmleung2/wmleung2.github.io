@@ -21,6 +21,7 @@ async function init(){
   const data = await d3.csv(
     'https://flunky.github.io/cars2017.csv');
 
+  // create svg
   var svg = d3.select("#dataviz")
     .append("svg")
     .attr("width", 600)
@@ -60,7 +61,7 @@ async function init(){
     };
  
 
- // -1- Create a tooltip div that is hidden by default:
+ // create a tooltip div that is hidden by default:
   var tooltip = d3.select("#dataviz")
     .append("div")
       .style("opacity", 0)
@@ -74,7 +75,7 @@ async function init(){
       .style("color", "white")
       .html("I'm here");
 
- // -2- Create 3 functions to show / update (when mouse move but stay on same circle) / hide the tooltip
+ // create 3 functions to show / update (when mouse move but stay on same circle) / hide the tooltip
   var showTooltip = function(d) {
     tooltip
       .transition()
@@ -110,7 +111,7 @@ async function init(){
     .attr('r', 4)
     .style('fill', function(d,i){return fuelColor[d.Fuel];})
     .style('opacity', function(d,i){return fuelOpacity[d.Fuel];})
-    // -3- Trigger the functions
+    // trigger the 3 tooltip functions
     .on("mouseover", showTooltip )
     .on("mousemove", moveTooltip )
     .on("mouseleave", hideTooltip )
@@ -121,7 +122,6 @@ async function init(){
     .transition().duration(3000).delay(1000)
     .style('opacity', function(d,i){return greenOpacity[d.fill];});
 
- 
  
   // Add legend
     svg.append("g").append("circle").attr("cx",75).attr("cy",50).attr("r", 6).style("fill", "red")
