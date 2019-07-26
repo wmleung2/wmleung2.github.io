@@ -38,7 +38,7 @@ async function init(){
 
   var fuelColor = {
       'Diesel': 'red',
-      'Gasoline': 'blue',
+      'Gasoline': 'yellow',
       'Electricity': 'green'
     };
 
@@ -50,13 +50,13 @@ async function init(){
 
   var blueOpacity = {
       'red': 0,
-      'blue': 1,
+      'yellow': 1,
       'green': 0
     };
 
   var greenOpacity = {
       'red': 0,
-      'blue': 0,
+      'yellow': 0,
       'green': 1
     };
  
@@ -78,7 +78,7 @@ async function init(){
  // create 3 functions to show / update (when mouse move but stay on same circle) / hide the tooltip
   var showTooltip = function(d) {
     d3.select(this)
-       .attr("r", 10);
+       .attr("r", function(d){return rscale(d.EngineCylinders);});
     tooltip
       .transition()
       .duration(200);
@@ -131,7 +131,7 @@ async function init(){
  
   // Add legend
     svg.append("g").append("circle").attr("cx",75).attr("cy",50).attr("r", 6).style("fill", "red")
-    svg.append("g").append("circle").attr("cx",75).attr("cy",70).attr("r", 6).style("fill", "blue")
+    svg.append("g").append("circle").attr("cx",75).attr("cy",70).attr("r", 6).style("fill", "yellow")
     svg.append("g").append("circle").attr("cx",75).attr("cy",90).attr("r", 6).style("fill", "green")
     svg.append("g").append("text").attr("x", 100).attr("y", 55).text("Diesel Fuel").style("font-size", "15px").attr("alignment-baseline","middle")
     svg.append("g").append("text").attr("x", 100).attr("y", 75).text("Gasoline Fuel", "15px").attr("alignment-baseline","middle");
