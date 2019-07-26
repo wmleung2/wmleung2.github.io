@@ -79,8 +79,7 @@ async function init(){
     .transition().duration(3000).delay(1000)
     .style('opacity', function(d,i){return blueOpacity[d.fill];})
     .transition().duration(3000).delay(1000)
-    .style('opacity', function(d,i){return greenOpacity[d.fill];})
-    .call(d3.legend);
+    .style('opacity', function(d,i){return greenOpacity[d.fill];});
  
 
   d3.select("svg").selectAll("circle").data(data)
