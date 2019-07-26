@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 <html>
+
+<head> 
+<h1>Avg Highway MPG Vs Avg City MPG for different fuel vehicle </h1>
+</head>
+
 <script src='https://d3js.org/d3.v5.min.js'></script>
 <style> circle { stroke: black;} </style>
 
@@ -59,7 +64,7 @@ async function init(){
     };
  
 
-
+  // Add data as circles
   d3.select("svg").append("g")
    .attr("transform", "translate(50,50)")
    .selectAll("circle").data(data).enter()
@@ -74,7 +79,9 @@ async function init(){
     .transition().duration(3000).delay(1000)
     .style('opacity', function(d,i){return blueOpacity[d.fill];})
     .transition().duration(3000).delay(1000)
-    .style('opacity', function(d,i){return greenOpacity[d.fill];});
+    .style('opacity', function(d,i){return greenOpacity[d.fill];})
+    .transition().duration(3000).delay(1000);
+
  
 
   d3.selectAll()
@@ -82,6 +89,14 @@ async function init(){
     .on("mousemove", function(){return tooltip2.style("top", (event.pageY-2390)+"px").style("left",(event.pageX-800)+"px");})
     .on("mouseout", function(){return tooltip2.style("visibility", "hidden");});
  
+  // Add legend
+    d3.select("svg").append("g").append("circle").attr("cx",75).attr("cy",50).attr("r", 6).style("fill", "red")
+    d3.select("svg").append("g").append("circle").attr("cx",75).attr("cy",70).attr("r", 6).style("fill", "blue")
+    d3.select("svg").append("g").append("circle").attr("cx",75).attr("cy",90).attr("r", 6).style("fill", "green")
+    d3.select("svg").append("g").append("text").attr("x", 100).attr("y", 55).text("Diesel Fuel").style("font-size", "15px").attr("alignment-baseline","middle")
+    d3.select("svg").append("g").append("text").attr("x", 100).attr("y", 75).text("Gasoline Fuel", "15px").attr("alignment-baseline","middle");
+    d3.select("svg").append("g").append("text").attr("x", 100).attr("y", 95).text("Electricity Fuel", "15px").attr("alignment-baseline","middle");
+
   // Add a diagonal line where Avg Highway MPG = Avg City MPG
   d3.select("svg").append("g")
    .append("line")
@@ -122,6 +137,20 @@ async function init(){
       .style("text-anchor", "middle")
       .text("Avg City MPG");
 
+  // text label for better in city
+  d3.select("svg").append("text")             
+      .attr("transform",
+            "translate(450, 350)")
+      .style("text-anchor", "middle")
+      .text("More Efficient in City Region");
+
+
+  // text label for better on highway
+  d3.select("svg").append("text")             
+      .attr("transform",
+            "translate(200, 200)")
+      .style("text-anchor", "middle")
+      .text("More Efficient on Highway Region");
 }
 </script>
 
