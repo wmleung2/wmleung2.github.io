@@ -77,14 +77,16 @@ async function init(){
 
  // create 3 functions to show / update (when mouse move but stay on same circle) / hide the tooltip
   var showTooltip = function(d) {
+    d3.select(this)
+       .attr("r", 10);
     tooltip
       .transition()
-      .duration(200)
+      .duration(200);
     tooltip
       .style("opacity", 1)
       .html("Make: " + d.Make + "<br /> Fuel: " + d.Fuel + "<br /> Engine Cylinders: " + d.EngineCylinders + "<br />Avg Highway MPG: " + d.AverageHighwayMPG +  "<br /> Avg City MPG: " + d.AverageCityMPG )
         .style("left", (d3.mouse(this)[0]+30) + "px")
-        .style("top", (d3.mouse(this)[1]+30) + "px")
+        .style("top", (d3.mouse(this)[1]+30) + "px");
 
   }
   var moveTooltip = function(d) {
@@ -93,10 +95,12 @@ async function init(){
       .style("top", (d3.mouse(this)[1]+30) + "px")
   }
   var hideTooltip = function(d) {
+    d3.select(this)
+      .attr("r", 4)
     tooltip
       .transition()
       .duration(200)
-      .style("opacity", 0)
+      .style("opacity", 0);
   }
 
 
@@ -108,19 +112,21 @@ async function init(){
     .attr("class", "bubbles")
     .attr('cx', function(d,i){return xscale(d.AverageCityMPG);})
     .attr('cy', 500)
-    .attr('r', 6)
+    .attr('r', 4)
     .style('fill', function(d,i){return fuelColor[d.Fuel];})
     .style('opacity', function(d,i){return fuelOpacity[d.Fuel];})
-    // trigger the 3 tooltip functions
-    .on("mouseover", showTooltip )
-    .on("mousemove", moveTooltip )
-    .on("mouseleave", hideTooltip )
     .transition().duration(3000).delay(1000)
     .attr('cy', function(d,i){return yscale(d.AverageHighwayMPG);})
     .transition().duration(3000).delay(1000)
     .style('opacity', function(d,i){return blueOpacity[d.fill];})
     .transition().duration(3000).delay(1000)
     .style('opacity', function(d,i){return greenOpacity[d.fill];});
+
+  // trigger the 3 tooltip functions
+  svg.selectAll("circle")
+    .on("mouseover", showTooltip )
+    .on("mousemove", moveTooltip )
+    .on("mouseleave", hideTooltip )
 
  
   // Add legend
