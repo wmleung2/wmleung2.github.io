@@ -5,30 +5,25 @@
 
 <body onload='init()'>
 <svg id="scene" width=600 height=600>
-
-div.tooltip {	
-    position: absolute;			
-    text-align: center;			
-    width: 60px;					
-    height: 28px;					
-    padding: 2px;				
-    font: 12px sans-serif;		
-    background: lightsteelblue;	
-    border: 0px;		
-    border-radius: 8px;			
-    pointer-events: none;			
-}
-
 </svg>
+
 
 <script>
 async function init(){
   const data = await d3.csv(
     'https://flunky.github.io/cars2017.csv');
 
- var div = d3.select("svg").append("div")	
-    .attr("class", "tooltip")				
-    .style("opacity", 0);
+  var tooltip2 = d3.select("svg")
+    .append("div")
+    .style("position", "absolute")
+    .style("visibility", "hidden")
+    .style("background-color", "white")
+    .style("border", "solid")
+    .style("border-width", "1px")
+    .style("border-radius", "5px")
+    .style("padding", "10px")
+    .html("<p>I'm a tooltip written in HTML</p>");
+
 
   var xscale = d3.scaleLog().base(10)
     .domain([10,150]).range([0,500]);
@@ -82,21 +77,12 @@ async function init(){
     .style('opacity', function(d,i){return greenOpacity[d.fill];});
  
 
-  d3.select("svg").selectAll("circle").data(data)
-   .on("mouseover", function(d) {		
-            div.transition()		
-                .duration(200)		
-                .style("opacity", .9);		
-            div .html(d.Make + "<br/>"  + d.Fuel + "<br/>" + d.EngineCylinders)	
-                .style("left", (d3.event.pageX) + "px")		
-                .style("top", (d3.event.pageY - 28) + "px");	
-            })					
-    .on("mouseout", function(d) {		
-            div.transition()		
-                .duration(500)		
-                .style("opacity", 0);	
-        });
+  d3.selectAll()
+    .on("mouseover", function(){return tooltip2.style("visibility", "visible");})
+    .on("mousemove", function(){return tooltip2.style("top", (event.pageY-2390)+"px").style("left",(event.pageX-800)+"px");})
+    .on("mouseout", function(){return tooltip2.style("visibility", "hidden");});
  
+  // Add a diagonal line where Avg Highway MPG = Avg City MPG
   d3.select("svg").append("g")
    .append("line")
     .attr('x1', 0)
@@ -106,18 +92,35 @@ async function init(){
     .attr('stroke', 'red')
     .attr('stroke-dash-array', '1, 5');
 
- 
- d3.select("svg").append("g")
-   .attr("transform", "translate(50,50)")
-   .call(d3.axisLeft(yscale)
+  // Add the y Axis
+  d3.select("svg").append("g")
+    .attr("transform", "translate(50,50)")
+    .call(d3.axisLeft(yscale)
      .tickValues([10,20,50,100])
      .tickFormat(d3.format("~s")));
 
+  // text label for the y axis
+  d3.select("svg").append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 5)
+      .attr("x", -300 )
+      .attr("dy", "1em")
+      .style("text-anchor", "middle")
+      .text("Avg Highway MPG"); 
+
+  // Add the x Axis
   d3.select("svg").append("g")
    .attr("transform", "translate(50,550)")
    .call(d3.axisBottom(xscale)
      .tickValues([10,20,50,100])
      .tickFormat(d3.format("~s")));
+
+  // text label for the x axis
+  d3.select("svg").append("text")             
+      .attr("transform",
+            "translate(300, 590)")
+      .style("text-anchor", "middle")
+      .text("Avg City MPG");
 
 }
 </script>
