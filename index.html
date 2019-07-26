@@ -44,22 +44,27 @@ async function init(){
 
   var fuelOpacity = {
       'Diesel': 1,
+      'Gasoline': 1,
+      'Electricity': 1
+    };
+
+  var fuelOpacity1 = {
+      'Diesel': 1,
       'Gasoline': 0,
       'Electricity': 0
     };
 
-  var blueOpacity = {
-      'red': 0,
-      'yellow': 1,
-      'green': 0
+  var fuelOpacity2 = {
+      'Diesel': 0,
+      'Gasoline': 1,
+      'Electricity': 0
     };
 
-  var greenOpacity = {
-      'red': 0,
-      'yellow': 0,
-      'green': 1
+  var fuelOpacity3 = {
+      'Diesel': 0,
+      'Gasoline': 0,
+      'Electricity': 1
     };
- 
 
  // create a tooltip div that is hidden by default:
   var tooltip = d3.select("#dataviz")
@@ -115,12 +120,16 @@ async function init(){
     .attr('r', 4)
     .style('fill', function(d,i){return fuelColor[d.Fuel];})
     .style('opacity', function(d,i){return fuelOpacity[d.Fuel];})
-    .transition().duration(3000).delay(1000)
+    .transition().duration(2000).delay(500)
     .attr('cy', function(d,i){return yscale(d.AverageHighwayMPG);})
-    .transition().duration(3000).delay(1000)
-    .style('opacity', function(d,i){return blueOpacity[d.fill];})
-    .transition().duration(3000).delay(1000)
-    .style('opacity', function(d,i){return greenOpacity[d.fill];});
+    .transition().duration(2000).delay(500)
+    .style('opacity', function(d,i){return fuelOpacity1[d.Fuel];})
+    .transition().duration(2000).delay(500)
+    .style('opacity', function(d,i){return fuelOpacity2[d.Fuel];})
+    .transition().duration(2000).delay(500)
+    .style('opacity', function(d,i){return fuelOpacity3[d.Fuel];})
+    .transition().duration(2000).delay(500)
+    .style('opacity', function(d,i){return fuelOpacity[d.Fuel];});
 
   // trigger the 3 tooltip functions
   svg.selectAll("circle")
