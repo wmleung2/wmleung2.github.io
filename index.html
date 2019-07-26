@@ -5,19 +5,26 @@
 <h1>Avg Highway MPG Vs Avg City MPG for different fuel vehicle </h1>
 </head>
 
-<script src='https://d3js.org/d3.v5.js'></script>
-<style> circle { stroke: black;} </style>
+<script src='https://d3js.org/d3.v5.min.js'></script>
+<div id="dataviz"></div>
+
+<style> 
+circle { stroke: black;} 
+</style>
 
 <body onload='init()'>
-<svg id="scene" width=600 height=600>
-</svg>
-
 
 <script>
+
 async function init(){
   // load data csv file
   const data = await d3.csv(
     'https://flunky.github.io/cars2017.csv');
+
+  var svg = d3.select("#dataviz")
+    .append("svg")
+    .attr("width", 600)
+    .attr("height", 600);
 
   var xscale = d3.scaleLog().base(10)
     .domain([10,150]).range([0,500]);
@@ -54,14 +61,18 @@ async function init(){
  
 
  // -1- Create a tooltip div that is hidden by default:
-  var tooltip = d3.select()
+  var tooltip = d3.select("#dataviz")
     .append("div")
-      .style("opacity", 0)
+      .style("opacity", 1)
       .attr("class", "tooltip")
+      .attr("x", 100)
+      .attr("y", 200)
+      .style("display", "inline-block")
       .style("background-color", "black")
       .style("border-radius", "5px")
       .style("padding", "10px")
       .style("color", "white")
+      .html("I'm here");
 
  // -2- Create 3 functions to show / update (when mouse move but stay on same circle) / hide the tooltip
   var showTooltip = function(d) {
@@ -70,13 +81,14 @@ async function init(){
       .duration(200)
     tooltip
       .style("opacity", 1)
-      .html("Country: " + d.Make)
-      .style("left", (d3.mouse(this)[0]+30) + "px")
-      .style("top", (d3.mouse(this)[1]+30) + "px")
+      .html(d3.event.pageX + ", " + d3.event.pageY + "<br />Make: " + d.Make + "<br /> Engine Cylinders: " + d.EngineCylinders)
+        .style("left", (d3.mouse(this)[0]+30) + "px")
+        .style("top", (d3.mouse(this)[1]+30) + "px")
+
   }
   var moveTooltip = function(d) {
     tooltip
-      .style("left", (d3.mouse(this)[0]+30) + "px")
+      .style("left", ( d3.mouse(this)[0]+30) + "px")
       .style("top", (d3.mouse(this)[1]+30) + "px")
   }
   var hideTooltip = function(d) {
@@ -88,10 +100,11 @@ async function init(){
 
 
   // Add data as circles
-  d3.select("svg").append("g")
+  svg.append("g")
    .attr("transform", "translate(50,50)")
    .selectAll("circle").data(data).enter()
     .append("circle")
+    .attr("class", "bubbles")
     .attr('cx', function(d,i){return xscale(d.AverageCityMPG);})
     .attr('cy', 500)
     .attr('r', 4)
@@ -108,24 +121,18 @@ async function init(){
     .transition().duration(3000).delay(1000)
     .style('opacity', function(d,i){return greenOpacity[d.fill];});
 
-
  
-
-  d3.selectAll()
-    .on("mouseover", function(){return tooltip2.style("visibility", "visible");})
-    .on("mousemove", function(){return tooltip2.style("top", (event.pageY-2390)+"px").style("left",(event.pageX-800)+"px");})
-    .on("mouseout", function(){return tooltip2.style("visibility", "hidden");});
  
   // Add legend
-    d3.select("svg").append("g").append("circle").attr("cx",75).attr("cy",50).attr("r", 6).style("fill", "red")
-    d3.select("svg").append("g").append("circle").attr("cx",75).attr("cy",70).attr("r", 6).style("fill", "blue")
-    d3.select("svg").append("g").append("circle").attr("cx",75).attr("cy",90).attr("r", 6).style("fill", "green")
-    d3.select("svg").append("g").append("text").attr("x", 100).attr("y", 55).text("Diesel Fuel").style("font-size", "15px").attr("alignment-baseline","middle")
-    d3.select("svg").append("g").append("text").attr("x", 100).attr("y", 75).text("Gasoline Fuel", "15px").attr("alignment-baseline","middle");
-    d3.select("svg").append("g").append("text").attr("x", 100).attr("y", 95).text("Electricity Fuel", "15px").attr("alignment-baseline","middle");
+    svg.append("g").append("circle").attr("cx",75).attr("cy",50).attr("r", 6).style("fill", "red")
+    svg.append("g").append("circle").attr("cx",75).attr("cy",70).attr("r", 6).style("fill", "blue")
+    svg.append("g").append("circle").attr("cx",75).attr("cy",90).attr("r", 6).style("fill", "green")
+    svg.append("g").append("text").attr("x", 100).attr("y", 55).text("Diesel Fuel").style("font-size", "15px").attr("alignment-baseline","middle")
+    svg.append("g").append("text").attr("x", 100).attr("y", 75).text("Gasoline Fuel", "15px").attr("alignment-baseline","middle");
+    svg.append("g").append("text").attr("x", 100).attr("y", 95).text("Electricity Fuel", "15px").attr("alignment-baseline","middle");
 
   // Add a diagonal line where Avg Highway MPG = Avg City MPG
-  d3.select("svg").append("g")
+  svg.append("g")
    .append("line")
     .attr('x1', 0)
     .attr('y1', 600)
@@ -135,14 +142,14 @@ async function init(){
     .attr('stroke-dash-array', '1, 5');
 
   // Add the y Axis
-  d3.select("svg").append("g")
+  svg.append("g")
     .attr("transform", "translate(50,50)")
     .call(d3.axisLeft(yscale)
      .tickValues([10,20,50,100])
      .tickFormat(d3.format("~s")));
 
   // text label for the y axis
-  d3.select("svg").append("text")
+  svg.append("text")
       .attr("transform", "rotate(-90)")
       .attr("y", 5)
       .attr("x", -300 )
@@ -151,21 +158,21 @@ async function init(){
       .text("Avg Highway MPG"); 
 
   // Add the x Axis
-  d3.select("svg").append("g")
+  svg.append("g")
    .attr("transform", "translate(50,550)")
    .call(d3.axisBottom(xscale)
      .tickValues([10,20,50,100])
      .tickFormat(d3.format("~s")));
 
   // text label for the x axis
-  d3.select("svg").append("text")             
+  svg.append("text")             
       .attr("transform",
             "translate(300, 590)")
       .style("text-anchor", "middle")
       .text("Avg City MPG");
 
   // text label for better in city
-  d3.select("svg").append("text")             
+  svg.append("text")             
       .attr("transform",
             "translate(450, 350)")
       .style("text-anchor", "middle")
@@ -173,11 +180,12 @@ async function init(){
 
 
   // text label for better on highway
-  d3.select("svg").append("text")             
+  svg.append("text")             
       .attr("transform",
             "translate(200, 200)")
       .style("text-anchor", "middle")
       .text("More Efficient on Highway Region");
+
 }
 </script>
 
