@@ -82,7 +82,7 @@ async function init(){
       .duration(200)
     tooltip
       .style("opacity", 1)
-      .html("Make: " + d.Make + "<br /> Engine Cylinders: " + d.EngineCylinders + "<br />Avg Highway MPG: " + d.AverageHighwayMPG +  "<br /> Avg City MPG: " + d.AverageCityMPG )
+      .html("Make: " + d.Make + "<br /> Fuel: " + d.Fuel + "<br /> Engine Cylinders: " + d.EngineCylinders + "<br />Avg Highway MPG: " + d.AverageHighwayMPG +  "<br /> Avg City MPG: " + d.AverageCityMPG )
         .style("left", (d3.mouse(this)[0]+30) + "px")
         .style("top", (d3.mouse(this)[1]+30) + "px")
 
@@ -108,7 +108,7 @@ async function init(){
     .attr("class", "bubbles")
     .attr('cx', function(d,i){return xscale(d.AverageCityMPG);})
     .attr('cy', 500)
-    .attr('r', 4)
+    .attr('r', 6)
     .style('fill', function(d,i){return fuelColor[d.Fuel];})
     .style('opacity', function(d,i){return fuelOpacity[d.Fuel];})
     // trigger the 3 tooltip functions
