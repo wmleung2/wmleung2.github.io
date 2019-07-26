@@ -63,7 +63,7 @@ async function init(){
  // -1- Create a tooltip div that is hidden by default:
   var tooltip = d3.select("#dataviz")
     .append("div")
-      .style("opacity", 1)
+      .style("opacity", 0)
       .attr("class", "tooltip")
       .attr("x", 100)
       .attr("y", 200)
@@ -81,7 +81,7 @@ async function init(){
       .duration(200)
     tooltip
       .style("opacity", 1)
-      .html(d3.event.pageX + ", " + d3.event.pageY + "<br />Make: " + d.Make + "<br /> Engine Cylinders: " + d.EngineCylinders)
+      .html("Make: " + d.Make + "<br /> Engine Cylinders: " + d.EngineCylinders + "<br />Avg Highway MPG: " + d.AverageHighwayMPG +  "<br /> Avg City MPG: " + d.AverageCityMPG )
         .style("left", (d3.mouse(this)[0]+30) + "px")
         .style("top", (d3.mouse(this)[1]+30) + "px")
 
