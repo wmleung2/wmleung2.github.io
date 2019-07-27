@@ -34,7 +34,7 @@ async function init(){
     .domain([10,150]).range([500,0]);
 
   var rscale = d3.scaleLinear()
-    .domain([0,12]).range([2,14]);
+    .domain([0,12]).range([6,18]);
 
   var fuelColor = {
       'Diesel': 'red',
@@ -151,13 +151,13 @@ async function init(){
     svg.append("g").append("circle").attr("cx",75).attr("cy",50).attr("r", 4).style("fill", "red")
     svg.append("g").append("circle").attr("cx",75).attr("cy",70).attr("r", 4).style("fill", "yellow")
     svg.append("g").append("circle").attr("cx",75).attr("cy",90).attr("r", 4).style("fill", "green")
-    svg.append("g").append("circle").attr("cx",220).attr("cy",50).attr("r", 2).style("fill", "white")
-    svg.append("g").append("circle").attr("cx",220).attr("cy",70).attr("r", 14).style("fill", "white")
+    svg.append("g").append("circle").attr("cx",220).attr("cy",50).attr("r", 6).style("fill", "white")
+    svg.append("g").append("circle").attr("cx",220).attr("cy",80).attr("r", 18).style("fill", "white")
     svg.append("g").append("text").attr("x", 100).attr("y", 55).text("Diesel Fuel").style("font-size", "15px").attr("alignment-baseline","middle")
     svg.append("g").append("text").attr("x", 100).attr("y", 75).text("Gasoline Fuel", "15px").attr("alignment-baseline","middle");
     svg.append("g").append("text").attr("x", 100).attr("y", 95).text("Electricity Fuel", "15px").attr("alignment-baseline","middle");
     svg.append("g").append("text").attr("x", 245).attr("y", 55).text("0 Engine Cylinder", "15px").attr("alignment-baseline","middle");
-    svg.append("g").append("text").attr("x", 245).attr("y", 75).text("12 Engine Cylinder", "15px").attr("alignment-baseline","middle");
+    svg.append("g").append("text").attr("x", 245).attr("y", 85).text("12 Engine Cylinder", "15px").attr("alignment-baseline","middle");
 
   // Add a diagonal line where Avg Highway MPG = Avg City MPG
   svg.append("g")
