@@ -120,16 +120,25 @@ async function init(){
     .attr('r', 4)
     .style('fill', function(d,i){return fuelColor[d.Fuel];})
     .style('opacity', function(d,i){return fuelOpacity[d.Fuel];})
+    // transition from 0 to correct y value
     .transition().duration(2000).delay(500)
     .attr('cy', function(d,i){return yscale(d.AverageHighwayMPG);})
+    // show each fuel seperately
     .transition().duration(2000).delay(500)
     .style('opacity', function(d,i){return fuelOpacity1[d.Fuel];})
     .transition().duration(2000).delay(500)
     .style('opacity', function(d,i){return fuelOpacity2[d.Fuel];})
     .transition().duration(2000).delay(500)
     .style('opacity', function(d,i){return fuelOpacity3[d.Fuel];})
+    // show all fuel
     .transition().duration(2000).delay(500)
-    .style('opacity', function(d,i){return fuelOpacity[d.Fuel];});
+    .style('opacity', function(d,i){return fuelOpacity[d.Fuel];})
+    // change circle size based on number of engine cylinder
+    //.transition().duration(2000).delay(500)
+    .attr('r', function(d,i){return rscale(d.EngineCylinders);})
+    // change circle size back to uniform
+    .transition().duration(2000).delay(500)
+    .attr('r', 4);
 
   // trigger the 3 tooltip functions
   svg.selectAll("circle")
@@ -139,12 +148,16 @@ async function init(){
 
  
   // Add legend
-    svg.append("g").append("circle").attr("cx",75).attr("cy",50).attr("r", 6).style("fill", "red")
-    svg.append("g").append("circle").attr("cx",75).attr("cy",70).attr("r", 6).style("fill", "yellow")
-    svg.append("g").append("circle").attr("cx",75).attr("cy",90).attr("r", 6).style("fill", "green")
+    svg.append("g").append("circle").attr("cx",75).attr("cy",50).attr("r", 4).style("fill", "red")
+    svg.append("g").append("circle").attr("cx",75).attr("cy",70).attr("r", 4).style("fill", "yellow")
+    svg.append("g").append("circle").attr("cx",75).attr("cy",90).attr("r", 4).style("fill", "green")
+    svg.append("g").append("circle").attr("cx",220).attr("cy",50).attr("r", 2).style("fill", "white")
+    svg.append("g").append("circle").attr("cx",220).attr("cy",70).attr("r", 14).style("fill", "white")
     svg.append("g").append("text").attr("x", 100).attr("y", 55).text("Diesel Fuel").style("font-size", "15px").attr("alignment-baseline","middle")
     svg.append("g").append("text").attr("x", 100).attr("y", 75).text("Gasoline Fuel", "15px").attr("alignment-baseline","middle");
     svg.append("g").append("text").attr("x", 100).attr("y", 95).text("Electricity Fuel", "15px").attr("alignment-baseline","middle");
+    svg.append("g").append("text").attr("x", 245).attr("y", 55).text("0 Engine Cylinder", "15px").attr("alignment-baseline","middle");
+    svg.append("g").append("text").attr("x", 245).attr("y", 75).text("12 Engine Cylinder", "15px").attr("alignment-baseline","middle");
 
   // Add a diagonal line where Avg Highway MPG = Avg City MPG
   svg.append("g")
